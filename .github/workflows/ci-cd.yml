@@ -34,7 +34,8 @@ on:
 jobs:
   test:
     name: 🧪 Test Suite
-    runs-on: ubuntu-latest
+    # Not ubuntu-latest: the Playwright version in use cannot install its browser on a newer release.
+    runs-on: ubuntu-24.04
     
     steps:
     - name: 📦 Checkout Code

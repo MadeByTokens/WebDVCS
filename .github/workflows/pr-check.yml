@@ -7,7 +7,8 @@ on:
 jobs:
   pr-test:
     name: 🔍 PR Quality Check
-    runs-on: ubuntu-latest
+    # Not ubuntu-latest: the Playwright version in use cannot install its browser on a newer release.
+    runs-on: ubuntu-24.04
     
     steps:
     - name: 📦 Checkout Code
