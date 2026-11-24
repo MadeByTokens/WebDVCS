@@ -78,47 +78,58 @@ jobs:
         path: playwright-report/
         retention-days: 30
 
-  build-and-deploy:
-    name: 🚀 Build & Deploy
+  build:
+    name: 🏗️ Build
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/a_new_hope'
-    
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+
     permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
       contents: read    # to checkout the repository
-    
-    # Deploy to the github-pages environment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    
+      pages: read       # to read the site's settings
+
     steps:
     - name: 📦 Checkout Code
       uses: actions/checkout@v6
-      
+
     - name: 🟢 Setup Node.js
       uses: actions/setup-node@v6
       with:
         node-version: '20'
         cache: 'npm'
-        
+
     - name: 📥 Install Dependencies
       run: npm ci
-      
+
     - name: 🏗️ Build for Production
       run: npm run build:github
-      
+
     - name: 📋 Setup Pages
       uses: actions/configure-pages@v6
-      
+
     - name: 📤 Upload Pages Artifact
       uses: actions/upload-pages-artifact@v5
       with:
         path: ./dist
-        
+
+  # A job of its own: asked for in the same job as the upload, the site is not yet
+  # listed and the deploy fails with "No artifacts named github-pages were found".
+  deploy:
+    name: 🚀 Deploy
+    needs: build
+    runs-on: ubuntu-latest
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
     - name: 🚀 Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v5
