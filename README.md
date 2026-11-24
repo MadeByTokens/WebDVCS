@@ -119,6 +119,13 @@ npm run serve:dist    # Start local server from dist/ (production-like)
 npm run ci            # Full CI pipeline simulation
 ```
 
+### Publishing a fork on GitHub Pages
+1. In the fork, open **Settings → Pages** and set the source to **GitHub Actions**.
+2. Open the **Actions** tab and enable the workflows (GitHub turns them off in a new fork).
+3. Choose **CI/CD Pipeline** and click **Run workflow**. It runs the tests, builds and publishes.
+
+After that, every push to `main` that changes the code publishes again.
+
 ## Requirements
 
 - Node.js v20+

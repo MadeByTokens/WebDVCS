@@ -1,6 +1,9 @@
 name: CI/CD Pipeline
 
 on:
+  # Start a test-and-deploy run by hand from the Actions tab: a fork needs this for
+  # its first deploy, because copying the repository is not a push.
+  workflow_dispatch:
   push:
     branches: [ main, master, a_new_hope ]
     paths:
